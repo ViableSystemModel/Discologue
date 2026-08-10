@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+local_spacetime_address="0.0.0.0:3001"
+args=("${@}")
+action="${args[0]}"
+args=("${args[@]:1}")
+[[ "$action" == "--help" ]] && display_help=true || display_help=false
+
+function declare {
+  if $display_help; then
+    echo "    ./discocli $1"
+    for i in "${@:2}"; do
+      echo "        $i"
+    done
+    echo ""
+  fi
+}
+
+if $display_help; then
+  echo "---------- Discologue CLI ----------"
+  echo "Usage: ./discocli <action>"
+  echo ""
+  echo "Actions:"
+  echo ""
+fi
+
+declare "spacetime-init" "initialize spacetimedb local database"
+function cmd-spacetime-init {
+  spacetime server add discologue --url "http://$local_spacetime_address"
+}
+
+declare "spacetime-start" "start spacetimedb on the appropriate port"
+function cmd-spacetime-start {
+  spacetime start -l $local_spacetime_address
+}
+
+declare "spacetime-generate" "generate spacetime bindings for both client and editor"
+function cmd-spacetime-generate {
+  spacetime generate \
+    --out-dir ./discologue-client/spacetime_bindings \
+    --lang rs \
+    --module-path ./discologue-server \
+    $@
+  
+  spacetime generate \
+    --out-dir ./discologue-editor/src/spacetime_bindings \
+    --lang ts \
+    --module-path ./discologue-server \
+    $@
+}
+
+declare "spacetime-publish" "create a local database"
+function cmd-spacetime-publish {
+  spacetime publish \
+    --server "http://$local_spacetime_address" discologue \
+    --delete-data \
+    -y \
+    --module-path ./discologue-server
+}
+
+declare "spacetime-logs" "display spacetime logs"
+function cmd-spacetime-logs {
+  spacetime logs \
+    --server "http://$local_spacetime_address" discologue
+}
+
+declare "pnpm" "use pnpm within the discologue-editor directory"
+function cmd-pnpm {
+  pnpm --dir ./discologue-editor $@
+}
+
+declare "cargo-server" "use cargo with the discologue-server directory"
+function cmd-cargo-server {
+  cd ./discologue-server
+  cargo $@
+  cd ..
+}
+
+declare "--help" "display this helper text"
+
+if [[ $(type -t "cmd-$1") == function ]]; then
+    cmd-$1 "${args[@]}"
+elif ! $display_help; then
+  echo "Action not recognized"
+  exit 1
+fi
