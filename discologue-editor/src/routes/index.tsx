@@ -1,12 +1,13 @@
 import { createSignal, For, Show } from 'solid-js';
 import { Title } from "@solidjs/meta";
 import { tables, reducers } from '../spacetime_bindings';
-import { useSpacetimeDB, useTable, useReducer } from 'spacetimedb/solid';
+import { useTable, useReducer } from 'spacetimedb/solid';
+import { useSpacetimeDBSignals } from '~/helpers';
 
 export default function Home() {
   const [name, setName] = createSignal('');
 
-  const conn = useSpacetimeDB();
+  const {isActive} = useSpacetimeDBSignals();
 
   // Subscribe to all people in the database
   const [people] = useTable(() => tables.person);
@@ -15,7 +16,7 @@ export default function Home() {
 
   const addPerson = (e: Event) => {
     e.preventDefault();
-    if (!name().trim() || !conn.isActive) return;
+    if (!name().trim() || !isActive()) return;
 
     // Call the add reducer
     addReducer({ name: name() });
@@ -28,13 +29,6 @@ export default function Home() {
       <div style={{ padding: '2rem' }}>
         <h1>SpacetimeDB SolidJS App</h1>
 
-        <div style={{ 'margin-bottom': '1rem' }}>
-          Status:{' '}
-          <strong style={{ color: conn.isActive ? 'green' : 'red' }}>
-            {conn.isActive ? 'Connected' : 'Disconnected'}
-          </strong>
-        </div>
-
         <form onSubmit={addPerson} style={{ 'margin-bottom': '2rem' }}>
           <input
             type="text"
@@ -42,12 +36,12 @@ export default function Home() {
             value={name()}
             onInput={e => setName(e.currentTarget.value)}
             style={{ padding: '0.5rem', 'margin-right': '0.5rem' }}
-            disabled={!conn.isActive}
+            disabled={!isActive()}
           />
           <button
             type="submit"
             style={{ padding: '0.5rem 1rem' }}
-            disabled={!conn.isActive}
+            disabled={!isActive()}
           >
             Add Person
           </button>
