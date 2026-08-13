@@ -26,6 +26,3 @@ gitignore
 # System Files
 .DS_Store
 Thumbs.db
-
-# Spacetime module bindings
-spacetime_bindings/
