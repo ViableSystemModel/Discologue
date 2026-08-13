@@ -81,6 +81,7 @@ export default function App() {
       root={(props) => (
         <ClerkProvider
           publishableKey={env.VITE_CLERK_PUBLISHABLE_KEY}
+          clerkJSUrl="https://clerk.discologue.dev/npm/@clerk/clerk-js@5.127.2/dist/clerk.browser.js"
         >
           <Suspense>
             <MetaProvider>
