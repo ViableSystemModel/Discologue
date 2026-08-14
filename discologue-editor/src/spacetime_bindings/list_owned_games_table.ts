@@ -9,7 +9,22 @@ import {
   type AlgebraicTypeType as __AlgebraicTypeType,
   type Infer as __Infer,
 } from "spacetimedb";
+import {
+  UserEditEvent,
+} from "./types";
+
 
 export default __t.row({
+  gameId: __t.u64().name("game_id"),
   name: __t.string(),
+  owner: __t.u64(),
+  get created() {
+    return UserEditEvent;
+  },
+  get updated() {
+    return __t.option(UserEditEvent);
+  },
+  get deleted() {
+    return __t.option(UserEditEvent);
+  },
 });

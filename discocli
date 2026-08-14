@@ -38,6 +38,11 @@ function cmd-spacetime-start {
 
 declare "spacetime-generate" "generate spacetime bindings for both client and editor"
 function cmd-spacetime-generate {
+  if [[ -f ./discologue-server/.env ]]; then
+    set -a
+    source ./discologue-server/.env
+    set +a
+  fi
   spacetime generate \
     --out-dir ./discologue-client/spacetime_bindings \
     --lang rs \
@@ -51,11 +56,29 @@ function cmd-spacetime-generate {
     $@
 }
 
-declare "spacetime-publish" "create a local database"
-function cmd-spacetime-publish {
+declare "spacetime-push-local" "create or update a local database"
+function cmd-spacetime-push-local {
+  if [[ -f ./discologue-server/.env ]]; then
+    set -a
+    source ./discologue-server/.env
+    set +a
+  fi
   spacetime publish \
     --server "http://$local_spacetime_address" discologue \
     --delete-data \
+    -y \
+    --module-path ./discologue-server 
+}
+
+declare "spacetime-push-cloud" "create or update a cloud database"
+function cmd-spacetime-push-cloud {
+  if [[ -f ./discologue-server/.env ]]; then
+    set -a
+    source ./discologue-server/.env
+    set +a
+  fi
+  spacetime publish discologue \
+    --server maincloud \
     -y \
     --module-path ./discologue-server
 }

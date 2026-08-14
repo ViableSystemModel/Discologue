@@ -1,5 +1,5 @@
 [package]
-name = "spacetime-module"
+name = "discologue-server"
 version = "0.1.0"
 edition = "2024"
 
@@ -18,3 +18,6 @@ crate-type = ["cdylib"]
 spacetimedb = { git = "https://github.com/ClockworkLabs/SpacetimeDB" }
 log = "0.4"
 rand = "0.8.5"
+
+[build-dependencies]
+url = "2.5.8"

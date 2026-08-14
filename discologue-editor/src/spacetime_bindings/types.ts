@@ -10,8 +10,115 @@ import {
   type Infer as __Infer,
 } from "spacetimedb";
 
-export const Person = __t.object("Person", {
+export const Conversation = __t.object("Conversation", {
+  conversationId: __t.u64(),
+  gameId: __t.u64(),
   name: __t.string(),
+  entryPoint: __t.option(__t.u64()),
+  get created() {
+    return UserEditEvent;
+  },
+  get updated() {
+    return __t.option(UserEditEvent);
+  },
+  get deleted() {
+    return __t.option(UserEditEvent);
+  },
 });
-export type Person = __Infer<typeof Person>;
+export type Conversation = __Infer<typeof Conversation>;
+
+export const Game = __t.object("Game", {
+  gameId: __t.u64(),
+  name: __t.string(),
+  owner: __t.u64(),
+  get created() {
+    return UserEditEvent;
+  },
+  get updated() {
+    return __t.option(UserEditEvent);
+  },
+  get deleted() {
+    return __t.option(UserEditEvent);
+  },
+});
+export type Game = __Infer<typeof Game>;
+
+export const GameAccess = __t.object("GameAccess", {
+  gameAccessId: __t.u64(),
+  gameId: __t.u64(),
+  userId: __t.u64(),
+  get type() {
+    return GameAccessType;
+  },
+  get created() {
+    return UserEditEvent;
+  },
+  get updated() {
+    return __t.option(UserEditEvent);
+  },
+});
+export type GameAccess = __Infer<typeof GameAccess>;
+
+// The tagged union or sum type for the algebraic type `GameAccessType`.
+export const GameAccessType = __t.enum("GameAccessType", {
+  Read: __t.unit(),
+  Write: __t.unit(),
+  Revoked: __t.unit(),
+});
+export type GameAccessType = __Infer<typeof GameAccessType>;
+
+export const Passage = __t.object("Passage", {
+  passageId: __t.u64(),
+  conversationId: __t.u64(),
+  name: __t.string(),
+  content: __t.string(),
+  get created() {
+    return UserEditEvent;
+  },
+  get updated() {
+    return __t.option(UserEditEvent);
+  },
+  get deleted() {
+    return __t.option(UserEditEvent);
+  },
+});
+export type Passage = __Infer<typeof Passage>;
+
+export const PassageOption = __t.object("PassageOption", {
+  passageOptionId: __t.u64(),
+  passageId: __t.u64(),
+  content: __t.string(),
+  repeatable: __t.bool(),
+  targetPassageId: __t.option(__t.u64()),
+  get created() {
+    return UserEditEvent;
+  },
+  get updated() {
+    return __t.option(UserEditEvent);
+  },
+  get deleted() {
+    return __t.option(UserEditEvent);
+  },
+});
+export type PassageOption = __Infer<typeof PassageOption>;
+
+export const User = __t.object("User", {
+  userId: __t.u64(),
+  registeredAt: __t.timestamp(),
+  authSubject: __t.string(),
+});
+export type User = __Infer<typeof User>;
+
+export const UserEditEvent = __t.object("UserEditEvent", {
+  by: __t.u64(),
+  at: __t.timestamp(),
+});
+export type UserEditEvent = __Infer<typeof UserEditEvent>;
+
+export const UserIdentity = __t.object("UserIdentity", {
+  userId: __t.u64(),
+  identity: __t.identity(),
+  createdAt: __t.timestamp(),
+});
+export type UserIdentity = __Infer<typeof UserIdentity>;
 

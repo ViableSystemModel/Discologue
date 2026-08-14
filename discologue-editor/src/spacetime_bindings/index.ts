@@ -34,39 +34,29 @@ import {
 } from "spacetimedb";
 
 // Import all reducer arg schemas
-import AddReducer from "./add_reducer";
-import SayHelloReducer from "./say_hello_reducer";
+import CreateGameReducer from "./create_game_reducer";
 
 // Import all procedure arg schemas
 
 // Import all table schema definitions
-import AllPeopleRow from "./all_people_table";
-import PersonRow from "./person_table";
+import ListOwnedGamesRow from "./list_owned_games_table";
 
 /** Type-only namespace exports for generated type groups. */
 
 /** The schema information for all tables in this module. This is defined the same was as the tables would have been defined in the server. */
 const tablesSchema = __schema({
-  person: __table({
-    name: 'person',
+  listOwnedGames: __table({
+    name: 'list_owned_games',
     indexes: [
     ],
     constraints: [
     ],
-  }, PersonRow),
-  allPeople: __table({
-    name: 'all_people',
-    indexes: [
-    ],
-    constraints: [
-    ],
-  }, AllPeopleRow),
+  }, ListOwnedGamesRow),
 });
 
 /** The schema information for all reducers in this module. This is defined the same way as the reducers would have been defined in the server, except the body of the reducer is omitted in code generation. */
 const reducersSchema = __reducers(
-  __reducerSchema("add", AddReducer),
-  __reducerSchema("say_hello", SayHelloReducer),
+  __reducerSchema("create_game", CreateGameReducer),
 );
 
 /** The schema information for all procedures in this module. This is defined the same way as the procedures would have been defined in the server. */
@@ -75,8 +65,8 @@ const proceduresSchema = __procedures(
 
 type __SchemaWithTableAccessorAliases = Omit<typeof tablesSchema.schemaType, "tables"> & {
   tables: typeof tablesSchema.schemaType.tables & {
-    /** @deprecated Use `allPeople` instead. This alias will be removed in the next major version. */
-    readonly "all_people": Omit<typeof tablesSchema.schemaType.tables["allPeople"], "accessorName"> & { readonly accessorName: "all_people" };
+    /** @deprecated Use `listOwnedGames` instead. This alias will be removed in the next major version. */
+    readonly "list_owned_games": Omit<typeof tablesSchema.schemaType.tables["listOwnedGames"], "accessorName"> & { readonly accessorName: "list_owned_games" };
   };
 };
 
@@ -95,7 +85,7 @@ const REMOTE_MODULE = {
 >;
 
 const tableAccessorAliases = {
-  "all_people": "allPeople",
+  "list_owned_games": "listOwnedGames",
 } as const;
 
 function __withTableAccessorAliases<T extends object>(target: T, freeze = false): T {
@@ -116,14 +106,14 @@ function __withTableAccessorAliases<T extends object>(target: T, freeze = false)
 
 type __DbViewBase = __DbConnectionImpl<typeof REMOTE_MODULE>["db"];
 export type DbView = __DbViewBase & {
-  /** @deprecated Use `allPeople` instead. This alias will be removed in the next major version. */
-  readonly "all_people": __DbViewBase["allPeople"];
+  /** @deprecated Use `listOwnedGames` instead. This alias will be removed in the next major version. */
+  readonly "list_owned_games": __DbViewBase["listOwnedGames"];
 };
 
 type __TablesBase = __QueryBuilder<typeof tablesSchema.schemaType>;
 export type Tables = __TablesBase & {
-  /** @deprecated Use `allPeople` instead. This alias will be removed in the next major version. */
-  readonly "all_people": __TablesBase["allPeople"];
+  /** @deprecated Use `listOwnedGames` instead. This alias will be removed in the next major version. */
+  readonly "list_owned_games": __TablesBase["listOwnedGames"];
 };
 
 /** The tables available in this remote SpacetimeDB module. Each table reference doubles as a query builder. */
